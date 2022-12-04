@@ -32,7 +32,7 @@ export default function App() {
     (async () => {
       if (!state.hasBeenSetup) {
         const zkappWorkerClient = new ZkappWorkerClient();
-        
+
         console.log('Loading SnarkyJS...');
         await zkappWorkerClient.loadSnarkyJS();
         console.log('done');
@@ -61,7 +61,10 @@ export default function App() {
         await zkappWorkerClient.compileContract();
         console.log('zkApp compiled');
 
-        const zkappPublicKey = PublicKey.fromBase58('B62qph2VodgSo5NKn9gZta5BHNxppgZMDUihf1g7mXreL4uPJFXDGDA');
+
+        // if any problem while interacting with wallet use this key and re depoloy the ui => B62qm9bg2vbmifhKEaU3pCZNo3QELNFdBNaJBqppwajkR6wdGt37SJM
+        // this example shared from https://discord.com/channels/484437221055922177/910549624413102100/1045715631993016330
+        const zkappPublicKey = PublicKey.fromBase58('B62qm9bg2vbmifhKEaU3pCZNo3QELNFdBNaJBqppwajkR6wdGt37SJM');
 
         await zkappWorkerClient.initZkappInstance(zkappPublicKey);
 
@@ -70,14 +73,14 @@ export default function App() {
         const currentNum = await zkappWorkerClient.getNum();
         console.log('current state:', currentNum.toString());
 
-        setState({ 
-            ...state, 
-            zkappWorkerClient, 
+        setState({
+            ...state,
+            zkappWorkerClient,
             hasWallet: true,
-            hasBeenSetup: true, 
-            publicKey, 
-            zkappPublicKey, 
-            accountExists, 
+            hasBeenSetup: true,
+            publicKey,
+            zkappPublicKey,
+            accountExists,
             currentNum
         });
       }
@@ -156,7 +159,7 @@ export default function App() {
   if (state.hasWallet != null && !state.hasWallet) {
     const auroLink = 'https://www.aurowallet.com/';
     const auroLinkElem = <a href={auroLink} target="_blank" rel="noreferrer"> [Link] </a>
-    hasWallet = <div> Could not find a wallet. Install Auro wallet here: { auroLinkElem }</div> 
+    hasWallet = <div> Could not find a wallet. Install Auro wallet here: { auroLinkElem }</div>
   }
 
   let setupText = state.hasBeenSetup ? 'SnarkyJS Ready' : 'Setting up SnarkyJS...';
